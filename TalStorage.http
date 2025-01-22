@@ -1,0 +1,6 @@
+@TalStorage_HostAddress = http://localhost:5022
+
+GET {{TalStorage_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
