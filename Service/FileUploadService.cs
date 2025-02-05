@@ -47,4 +47,24 @@ public class FileUploadService : IFileUploadService
 
         return (url, fileRecord.FileId);
     }
+    public async Task<string> GetPresignedDownloadUrlAsync(string fileName)
+    {
+        if (string.IsNullOrEmpty(fileName))
+        {
+            throw new ArgumentException("FileName cannot be null or empty.", nameof(fileName));
+        }
+
+        var presignedUrlRequest = new GetPreSignedUrlRequest
+        {
+            BucketName = BucketName,
+            Key = fileName,
+            Expires = DateTime.UtcNow.AddMinutes(UrlExpiryDurationMinutes),
+            Verb = HttpVerb.GET
+        };
+
+        // Generate the presigned URL for downloading
+        var url = _s3Client.GetPreSignedURL(presignedUrlRequest);
+
+        return url;
+    }
 }

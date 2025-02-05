@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using TalStorage.Constants;
 
 public class FileShareRecord : BaseEntity
 {
@@ -12,6 +13,7 @@ public class FileShareRecord : BaseEntity
     public string SharedWith { get; set; }
 
     public DateTime SharedAt { get; set; } = DateTime.UtcNow;
+    public FileAccessAs FileAccessAs { get; set; } = FileAccessAs.Owner;
 
     public FileRecord File { get; set; }
 }
