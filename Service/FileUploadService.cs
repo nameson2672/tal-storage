@@ -15,7 +15,7 @@ public class FileUploadService : IFileUploadService
         _dbContext = dbContext;
     }
 
-    public async Task<(string PresignedUrl, int FileRecordId)> GeneratePresignedUrlAsync(string fileName, long size, string mimeType, string uploadedBy)
+    public async Task<(string PresignedUrl, string FileRecordId)> GeneratePresignedUrlAsync(string fileName, long size, string mimeType, string uploadedBy)
     {
         if (string.IsNullOrEmpty(fileName))
         {
@@ -37,7 +37,6 @@ public class FileUploadService : IFileUploadService
             Name = fileName,
             Size = size,
             MimeType = mimeType,
-            UploadedBy = uploadedBy,
             Status = "Pending",
             S3Url = $"https://{BucketName}.s3.amazonaws.com/{fileName}"
         };
@@ -45,7 +44,7 @@ public class FileUploadService : IFileUploadService
         await _dbContext.FileRecords.AddAsync(fileRecord);
         await _dbContext.SaveChangesAsync();
 
-        return (url, fileRecord.FileId);
+        return (url, fileRecord.Id);
     }
     public async Task<string> GetPresignedDownloadUrlAsync(string fileName)
     {

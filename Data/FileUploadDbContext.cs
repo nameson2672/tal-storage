@@ -1,32 +1,54 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection;
+using TalStorage.Models;
 
-public class FileUploadDbContext : DbContext
+public class FileUploadDbContext : IdentityDbContext<ApplicationUser>
 {
-    public FileUploadDbContext(DbContextOptions<FileUploadDbContext> options) : base(options) { }
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    public FileUploadDbContext(DbContextOptions<FileUploadDbContext> options, IHttpContextAccessor httpContextAccessor)
+            : base(options)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
 
     public DbSet<FileRecord> FileRecords { get; set; }
     public DbSet<FileShareRecord> FileShareRecords { get; set; }
-
-    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        var entries = ChangeTracker.Entries();
-        foreach (var entry in entries)
-        {
-            if (entry.Entity is BaseEntity baseEntity)
-            {
-                var now = DateTime.UtcNow;
-                switch (entry.State)
-                {
-                    case EntityState.Added:
-                        baseEntity.CreatedAt = now;
-                        baseEntity.UpdatedAt = now;
-                        break;
-                    case EntityState.Modified:
-                        baseEntity.UpdatedAt = now;
-                        break;
-                }
-            }
-        }
-        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        base.OnModelCreating(builder);
+        builder.Entity<ApplicationUser>().HasQueryFilter(e => e.IsDeleted == false);
+
+        builder.Entity<FileRecord>()
+               .HasMany<FileShareRecord>(s => s.FilesSharedWith)
+               .WithOne()
+               .OnDelete(DeleteBehavior.NoAction);
+
     }
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var entries = ChangeTracker
+            .Entries()
+                .Where(e => e.Entity is IBaseEntity &&
+                            (e.State == EntityState.Added || e.State == EntityState.Modified));
+
+            foreach (var entry in entries)
+            {
+                var entity = (IBaseEntity)entry.Entity;
+
+                if (entry.State == EntityState.Added)
+                {
+                    entity.CreatedAt = DateTime.UtcNow;
+                }
+
+            entity.UpdatedAt = DateTime.UtcNow;
+                // entity.UpdatedBy = _httpContextAccessor.HttpContext?.Items["UpdatedBy"]?.ToString() ?? "system";
+                entity.UpdatedBy = "system";
+            }
+
+            return await base.SaveChangesAsync(cancellationToken);
+        }
 }
