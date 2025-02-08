@@ -1,14 +1,19 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TalStorage.Controllers;
+using TalStorage.Service;
 
 public class FileUploadController : BaseController
 {
     private readonly IFileUploadService _fileUploadService;
+    private readonly FileUploadDbContext _dbContext;
+    private readonly IUserService _userService;
 
-    public FileUploadController(IFileUploadService fileUploadService)
+    public FileUploadController(IFileUploadService fileUploadService, FileUploadDbContext dbContext, IUserService userService)
     {
         _fileUploadService = fileUploadService;
+        _dbContext = dbContext;
+        _userService = userService;
     }
     [Authorize]
     [HttpPost]
@@ -21,7 +26,11 @@ public class FileUploadController : BaseController
 
         try
         {
-            var (presignedUrl, fileRecordId) = await _fileUploadService.GeneratePresignedUrlAsync(model.FileName, model.Size, model.MimeType, model.UploadedBy);
+            //var (presignedUrl, fileRecordId) = await _fileUploadService.GeneratePresignedUrlAsync(model.FileName, model.Size, model.MimeType, model.UploadedBy);/var
+            var (presignedUrl, fileRecordId) = ("you got it", "file record id"); 
+            var fileRecorcd = new FileRecord(model.FileName, model.FileName);
+            fileRecorcd.AddSharedUsers(new FileShareRecord(fileRecorcd.Id, _userService.GetUserId()));
+            await _dbContext.SaveChangesAsync();
             return Ok(new { PresignedUrl = presignedUrl, FileRecordId = fileRecordId });
         }
         catch (Exception ex)

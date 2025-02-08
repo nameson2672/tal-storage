@@ -25,7 +25,7 @@ namespace TalStorage.Controllers
                 var user = new ApplicationUser
                 {
                     UserName = registerDto.Email,
-                    Email = registerDto.Email,
+                    Email = registerDto.Email.ToLower(),
                     FullName = registerDto.FullName
                 };
 

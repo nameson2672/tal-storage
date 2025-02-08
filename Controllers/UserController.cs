@@ -41,7 +41,7 @@ namespace TalStorage.Controllers
         public async Task<IActionResult> GetUsersByEmail(string emailPrefix)
         {
             var users = await _context.Users
-                               .Where(u => u.Email.StartsWith(emailPrefix))
+                               .Where(u => u.Email.StartsWith(emailPrefix.ToLower()))
                                .Select(x => new { Name = x.FullName, Email = x.Email, Id = x.Id })
                                .ToListAsync();
 
