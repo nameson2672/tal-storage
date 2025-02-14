@@ -81,16 +81,17 @@ public class FileUploadDbContext : IdentityDbContext<ApplicationUser>
     {
         var entries = ChangeTracker
         .Entries()
-            .Where(e => e.Entity is IBaseEntity &&
+            .Where(e => e.Entity is BaseEntity &&
                         (e.State == EntityState.Added || e.State == EntityState.Modified));
 
         foreach (var entry in entries)
         {
-            var entity = (IBaseEntity)entry.Entity;
+            var entity = (BaseEntity)entry.Entity;
 
             if (entry.State == EntityState.Added)
             {
                 entity.CreatedAt = DateTime.UtcNow;
+                entity.CreatedBy = "system";
             }
 
             entity.UpdatedAt = DateTime.UtcNow;

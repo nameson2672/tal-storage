@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Resend;
 using System.Text;
 using TalStorage.Models;
 using TalStorage.Service;
@@ -20,7 +21,18 @@ builder.Configuration
 builder.Services.AddControllers();
 // Add services
 builder.Services.AddDbContext<FileUploadDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddAWSService<IAmazonS3>();
+
+
+// Load AWS settings from configuration
+var awsSettings = builder.Configuration.GetSection("AWS");
+var awsAccessKey = awsSettings["AccessKey"];
+var awsSecretKey = awsSettings["SecretKey"];
+var awsRegion = awsSettings["Region"];
+
+builder.Services.AddSingleton<IAmazonS3>(sp =>
+{
+    return new AmazonS3Client(awsAccessKey, awsSecretKey, Amazon.RegionEndpoint.GetBySystemName(awsRegion));
+});
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -46,6 +58,16 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
 });
+
+// Configure Resend Email Service
+builder.Services.AddOptions();
+builder.Services.AddHttpClient<ResendClient>();
+builder.Services.Configure<ResendClientOptions>(o =>
+{
+    o.ApiToken = builder.Configuration["Resend_Api_Token"]!;
+});
+builder.Services.AddTransient<IResend, ResendClient>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

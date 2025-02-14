@@ -3,7 +3,7 @@ using TalStorage.Constants;
 
 public class FileShareRecord : BaseEntity
 {
-    public FileShareRecord(Guid fileId, string sharedWith)
+    public FileShareRecord(Guid fileId, string sharedWith, FileAccessAs fileAccessAs = FileAccessAs.Owner)
     {
         FileId = fileId;
         SharedWith = sharedWith;
@@ -15,5 +15,5 @@ public class FileShareRecord : BaseEntity
     public string SharedWith { get; set; }
     public DateTime SharedAt { get; set; } = DateTime.UtcNow;
     public FileAccessAs FileAccessAs { get; set; } = FileAccessAs.Owner;
-    public FileRecord File { get; set; }
+    public FileRecord? File { get; set; }
 }

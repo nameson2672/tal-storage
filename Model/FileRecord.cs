@@ -7,14 +7,8 @@ public class FileRecord : BaseEntity
     {
         Name = name;
         S3Url = s3Url;
+        FilesSharedWith = new List<FileShareRecord> {  };
     }
-
-    public FileRecord AddSharedUsers(FileShareRecord fileShareRecord)
-    {
-        this.FilesSharedWith.Append(fileShareRecord);
-        return this;
-    }
-
     [Required]
     public string Name { get; set; }
 
