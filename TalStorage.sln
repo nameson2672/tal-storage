@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalStorage", "TalStorage.csproj", "{395C97B2-F46A-4556-A096-CA0C890180EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalStorage", "src\Storage\TalStorage.csproj", "{CA1FE8C4-4ACA-4526-A61C-6D5E297D176B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "src\UnitTest\UnitTest.csproj", "{73B99BB6-60F2-4B7B-9A47-F07366D88404}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{395C97B2-F46A-4556-A096-CA0C890180EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{395C97B2-F46A-4556-A096-CA0C890180EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{395C97B2-F46A-4556-A096-CA0C890180EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{395C97B2-F46A-4556-A096-CA0C890180EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA1FE8C4-4ACA-4526-A61C-6D5E297D176B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA1FE8C4-4ACA-4526-A61C-6D5E297D176B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA1FE8C4-4ACA-4526-A61C-6D5E297D176B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA1FE8C4-4ACA-4526-A61C-6D5E297D176B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73B99BB6-60F2-4B7B-9A47-F07366D88404}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73B99BB6-60F2-4B7B-9A47-F07366D88404}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73B99BB6-60F2-4B7B-9A47-F07366D88404}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73B99BB6-60F2-4B7B-9A47-F07366D88404}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
