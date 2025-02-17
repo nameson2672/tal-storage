@@ -26,7 +26,4 @@ RUN dotnet publish "./TalStorage.csproj" -c $BUILD_CONFIGURATION -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY entrypoint.sh /app/
-RUN ls /app/
-ENTRYPOINT ["/app/entrypoint.sh"]
 CMD ["dotnet", "TalStorage.dll"]

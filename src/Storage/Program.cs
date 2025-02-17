@@ -17,8 +17,10 @@ builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+    .AddJsonFile("/etc/secrets/appsettings.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
 builder.Services.AddControllers();
+
 // Add services
 builder.Services.AddDbContext<FileUploadDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
