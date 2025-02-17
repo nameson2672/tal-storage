@@ -1,4 +1,4 @@
 #!/bin/sh
 
-# Execute the application
-exec dotnet /app/TalStorage.dll
+# Example setup tasks
+echo "Running setup tasks..."
