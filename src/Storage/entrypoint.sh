@@ -1,5 +1,5 @@
 #!/bin/sh
-set -e
+set -ex 
 
 # Ensure /etc/secrets/<filename> exists
 if [ -f "/etc/secrets/appsettings.json" ]; then
@@ -10,4 +10,4 @@ else
 fi
 
 # Execute the application
-exec dotnet TalStorage.dll
+exec dotnet /app/TalStorage.dll
