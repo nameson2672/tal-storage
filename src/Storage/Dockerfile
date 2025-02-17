@@ -27,5 +27,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 COPY entrypoint.sh /app/
-RUN chmod +x /app/entrypoint.sh
 ENTRYPOINT ["/app/entrypoint.sh"]
