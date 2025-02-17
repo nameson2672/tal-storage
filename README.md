@@ -1,7 +1,7 @@
 # Tal Storage Service
 
 The **Tal Storage Service** is an ASP.NET Core 9-based file upload service that supports **multipart uploads** to **Amazon S3** and stores **file metadata** in a **PostgreSQL** database. This service is part of the **Tal** app and is designed for efficient file handling and secure storage.
-![Tal Storage Design](https://raw.githubusercontent.com/nameson2672/tal-storage/refs/heads/main/static/image.png)
+![Tal Storage Design](https://raw.githubusercontent.com/nameson2672/tal-storage/refs/heads/main/src/Storage/static/image.png)
 ## Features
 
 - Multipart file upload handling.
