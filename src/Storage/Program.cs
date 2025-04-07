@@ -72,6 +72,17 @@ builder.Services.Configure<ResendClientOptions>(o =>
 builder.Services.AddTransient<IResend, ResendClient>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
+// Add CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin()  // Allows any origin
+              .AllowAnyMethod()  // Allows any HTTP method
+              .AllowAnyHeader(); // Allows any headers
+    });
+});
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 // Add Swagger services
@@ -116,6 +127,9 @@ app.UseMiddleware<TalStorage.Middleware.LoggingMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Use CORS
+app.UseCors("AllowAllOrigins");
 
 app.MapControllers();
 
