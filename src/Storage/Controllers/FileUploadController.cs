@@ -1,3 +1,4 @@
+using Amazon.Runtime.Internal;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -158,5 +159,25 @@ public class FileUploadController : BaseController
         await _dbContext.SaveChangesAsync();
 
         return Ok("File shared successfully.");
+    }
+
+    [HttpGet("files_count")]
+    [Authorize]
+    public async Task<IActionResult> GetFileCount()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized("User ID not found.");
+        }
+
+        var fileAsOwner = _dbContext.FileShareRecords
+      .Count(x => x.SharedWith == userId && x.FileAccessAs == FileAccessAs.Owner);
+
+        var fileAsShared = _dbContext.FileShareRecords
+            .Count(x => x.SharedWith == userId && x.FileAccessAs != FileAccessAs.Owner);
+
+        return Ok(new { myFiles = fileAsOwner, sharedWithMe = fileAsShared });
+
     }
 }
