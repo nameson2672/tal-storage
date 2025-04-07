@@ -129,6 +129,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 // Use CORS
 app.UseCors("AllowAllOrigins");
+
+
 app.MapControllers();
 
 app.Run();
