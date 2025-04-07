@@ -83,7 +83,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 // Add Swagger services
@@ -119,19 +118,17 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-    app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.MapOpenApi();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseMiddleware<TalStorage.Middleware.LoggingMiddleware>();
-app.UseCors("AllowAllOrigins");
+
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-
-
-
+// Use CORS
+app.UseCors("AllowAllOrigins");
 app.MapControllers();
 
 app.Run();
