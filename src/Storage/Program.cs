@@ -127,9 +127,9 @@ app.UseMiddleware<TalStorage.Middleware.LoggingMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 // Use CORS
 app.UseCors("AllowAllOrigins");
+
 
 app.MapControllers();
 
