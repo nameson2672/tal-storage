@@ -124,13 +124,12 @@ var app = builder.Build();
     app.UseSwaggerUI();
 
 app.UseMiddleware<TalStorage.Middleware.LoggingMiddleware>();
-
+app.UseCors("AllowAllOrigins");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 
-app.UseCors("AllowAllOrigins");
 
 
 app.MapControllers();
