@@ -35,7 +35,7 @@ public class FileUploadController : BaseController
         {
             var presignedUrl = await _fileUploadService.GeneratePresignedUrlAsync(model.FileName, model.Size, model.MimeType, model.UploadedBy);
             //var (presignedUrl, fileRecordId) = ("you got it", "file record id"); 
-            var fileRecord = new FileRecord(model.FileName, model.FileName);
+            var fileRecord = new FileRecord(model.FileName, model.FileName, model.MimeType, model.Size);
             var fileShareRecord = new FileShareRecord(fileRecord.Id, _userService.GetUserId());
             fileRecord.FilesSharedWith = new List<FileShareRecord> { fileShareRecord };
             _dbContext.FileRecords.Add(fileRecord);
@@ -76,7 +76,6 @@ public class FileUploadController : BaseController
         {
             return Unauthorized("User ID not found.");
         }
-
         var files = await _dbContext.FileRecords
             .Include(f => f.FilesSharedWith)
             .Where(f => f.FilesSharedWith.Any(fs => fs.SharedWith == userId)) // Fetch files where user is shared with
@@ -92,10 +91,19 @@ public class FileUploadController : BaseController
                 {
                     fs.SharedWith,
                     fs.FileAccessAs,
-                    fs.SharedAt
+                    fs.SharedAt,
+                    User = _dbContext.Users
+                        .Where(u => u.Id == fs.SharedWith)
+                        .Select(u => new
+                        {
+                            u.FullName,
+                            u.Email
+                        })
+                        .FirstOrDefault()
                 })
             })
             .ToListAsync();
+
 
         return Ok(files);
     }
