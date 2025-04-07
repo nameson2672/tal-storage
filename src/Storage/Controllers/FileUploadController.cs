@@ -76,7 +76,6 @@ public class FileUploadController : BaseController
         {
             return Unauthorized("User ID not found.");
         }
-
         var files = await _dbContext.FileRecords
             .Include(f => f.FilesSharedWith)
             .Where(f => f.FilesSharedWith.Any(fs => fs.SharedWith == userId)) // Fetch files where user is shared with
@@ -92,10 +91,19 @@ public class FileUploadController : BaseController
                 {
                     fs.SharedWith,
                     fs.FileAccessAs,
-                    fs.SharedAt
+                    fs.SharedAt,
+                    User = _dbContext.Users
+                        .Where(u => u.Id == fs.SharedWith)
+                        .Select(u => new
+                        {
+                            u.FullName,
+                            u.Email
+                        })
+                        .FirstOrDefault()
                 })
             })
             .ToListAsync();
+
 
         return Ok(files);
     }
