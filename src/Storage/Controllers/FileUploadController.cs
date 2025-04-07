@@ -35,7 +35,7 @@ public class FileUploadController : BaseController
         {
             var presignedUrl = await _fileUploadService.GeneratePresignedUrlAsync(model.FileName, model.Size, model.MimeType, model.UploadedBy);
             //var (presignedUrl, fileRecordId) = ("you got it", "file record id"); 
-            var fileRecord = new FileRecord(model.FileName, model.FileName);
+            var fileRecord = new FileRecord(model.FileName, model.FileName, model.MimeType, model.Size);
             var fileShareRecord = new FileShareRecord(fileRecord.Id, _userService.GetUserId());
             fileRecord.FilesSharedWith = new List<FileShareRecord> { fileShareRecord };
             _dbContext.FileRecords.Add(fileRecord);

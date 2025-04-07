@@ -3,11 +3,13 @@ using System.Runtime.CompilerServices;
 
 public class FileRecord : BaseEntity
 {
-    public FileRecord(string name, string s3Url)
+    public FileRecord(string name, string s3Url, string mimeType, long ? size=0)
     {
         Name = name;
         S3Url = s3Url;
         FilesSharedWith = new List<FileShareRecord> {  };
+        Size = (long)(size == null ? long.MinValue : size);
+        MimeType = mimeType;
     }
     [Required]
     public string Name { get; set; }
